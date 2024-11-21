@@ -3,11 +3,14 @@ import {
   ACTIVE_USER,
   FULL_USER,
   ADD_LOGGED_USER,
-  CREATE_GROUP,
   CREATE_GROUP_REQUEST,
   CREATE_GROUP_SUCCESS,
   CREATE_GROUP_FAILURE,
-  
+  FETCH_ALL_GROUPS,
+  FETCH_ALL_GROUPS_SUCCESS,
+  FETCH_ALL_GROUPS_FAILURE
+
+
 } from "./constants";
 
 //Import Images
@@ -633,196 +636,197 @@ const INIT_STATE = {
       ],
     },
   ],
-  groups: [
-    {
-      gourpId: 1,
-      name: "#General",
-      profilePicture: "Null",
-      isGroup: true,
-      unRead: 0,
-      desc: "General Group",
-      members: [
-        { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
-        {
-          userId: 2,
-          name: "Ossie Wilson",
-          profilePicture: avatar8,
-          role: "admin",
-        },
-        {
-          userId: 3,
-          name: "Jonathan Miller",
-          profilePicture: "Null",
-          role: null,
-        },
-        { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
-        { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
-        {
-          userId: 6,
-          name: "Steve Walker",
-          profilePicture: avatar6,
-          role: null,
-        },
-      ],
-    },
-    {
-      gourpId: 2,
-      name: "#Reporting",
-      profilePicture: "Null",
-      isGroup: true,
-      unRead: 23,
-      desc: "reporing Group here...",
-      members: [
-        { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
-        {
-          userId: 2,
-          name: "Ossie Wilson",
-          profilePicture: avatar8,
-          role: "admin",
-        },
-        {
-          userId: 3,
-          name: "Jonathan Miller",
-          profilePicture: "Null",
-          role: null,
-        },
-        { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
-        { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
-        {
-          userId: 6,
-          name: "Steve Walker",
-          profilePicture: avatar6,
-          role: null,
-        },
-      ],
-    },
-    {
-      gourpId: 3,
-      name: "#Designer",
-      profilePicture: "Null",
-      isGroup: true,
-      unRead: 0,
-      isNew: true,
-      desc: "designers Group",
-      members: [
-        { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
-        {
-          userId: 2,
-          name: "Ossie Wilson",
-          profilePicture: avatar8,
-          role: "admin",
-        },
-        {
-          userId: 3,
-          name: "Jonathan Miller",
-          profilePicture: "Null",
-          role: null,
-        },
-        { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
-        { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
-        {
-          userId: 6,
-          name: "Steve Walker",
-          profilePicture: avatar6,
-          role: null,
-        },
-      ],
-    },
-    {
-      gourpId: 4,
-      name: "#Developers",
-      profilePicture: "Null",
-      isGroup: true,
-      unRead: 0,
-      desc: "developers Group",
-      members: [
-        { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
-        {
-          userId: 2,
-          name: "Ossie Wilson",
-          profilePicture: avatar8,
-          role: "admin",
-        },
-        {
-          userId: 3,
-          name: "Jonathan Miller",
-          profilePicture: "Null",
-          role: null,
-        },
-        { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
-        { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
-        {
-          userId: 6,
-          name: "Steve Walker",
-          profilePicture: avatar6,
-          role: null,
-        },
-      ],
-    },
-    {
-      gourpId: 5,
-      name: "#Project-aplha",
-      profilePicture: "Null",
-      isGroup: true,
-      unRead: 0,
-      isNew: true,
-      desc: "project related Group",
-      members: [
-        { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
-        {
-          userId: 2,
-          name: "Ossie Wilson",
-          profilePicture: avatar8,
-          role: "admin",
-        },
-        {
-          userId: 3,
-          name: "Jonathan Miller",
-          profilePicture: "Null",
-          role: null,
-        },
-        { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
-        { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
-        {
-          userId: 6,
-          name: "Steve Walker",
-          profilePicture: avatar6,
-          role: null,
-        },
-      ],
-    },
-    {
-      gourpId: 6,
-      name: "#Snacks",
-      profilePicture: "Null",
-      isGroup: true,
-      unRead: 0,
-      desc: "snacks Group",
-      members: [
-        { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
-        {
-          userId: 2,
-          name: "Ossie Wilson",
-          profilePicture: avatar8,
-          role: "admin",
-        },
-        {
-          userId: 3,
-          name: "Jonathan Miller",
-          profilePicture: "Null",
-          role: null,
-        },
-        { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
-        { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
-        {
-          userId: 6,
-          name: "Steve Walker",
-          profilePicture: avatar6,
-          role: null,
-        },
-      ],
-    },
-  ],
+  groups:[],
+  // groups: [
+  //   {
+  //     gourpId: 1,
+  //     name: "#General",
+  //     profilePicture: "Null",
+  //     isGroup: true,
+  //     unRead: 0,
+  //     desc: "General Group",
+  //     members: [
+  //       { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
+  //       {
+  //         userId: 2,
+  //         name: "Ossie Wilson",
+  //         profilePicture: avatar8,
+  //         role: "admin",
+  //       },
+  //       {
+  //         userId: 3,
+  //         name: "Jonathan Miller",
+  //         profilePicture: "Null",
+  //         role: null,
+  //       },
+  //       { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
+  //       { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
+  //       {
+  //         userId: 6,
+  //         name: "Steve Walker",
+  //         profilePicture: avatar6,
+  //         role: null,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     gourpId: 2,
+  //     name: "#Reporting",
+  //     profilePicture: "Null",
+  //     isGroup: true,
+  //     unRead: 23,
+  //     desc: "reporing Group here...",
+  //     members: [
+  //       { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
+  //       {
+  //         userId: 2,
+  //         name: "Ossie Wilson",
+  //         profilePicture: avatar8,
+  //         role: "admin",
+  //       },
+  //       {
+  //         userId: 3,
+  //         name: "Jonathan Miller",
+  //         profilePicture: "Null",
+  //         role: null,
+  //       },
+  //       { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
+  //       { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
+  //       {
+  //         userId: 6,
+  //         name: "Steve Walker",
+  //         profilePicture: avatar6,
+  //         role: null,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     gourpId: 3,
+  //     name: "#Designer",
+  //     profilePicture: "Null",
+  //     isGroup: true,
+  //     unRead: 0,
+  //     isNew: true,
+  //     desc: "designers Group",
+  //     members: [
+  //       { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
+  //       {
+  //         userId: 2,
+  //         name: "Ossie Wilson",
+  //         profilePicture: avatar8,
+  //         role: "admin",
+  //       },
+  //       {
+  //         userId: 3,
+  //         name: "Jonathan Miller",
+  //         profilePicture: "Null",
+  //         role: null,
+  //       },
+  //       { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
+  //       { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
+  //       {
+  //         userId: 6,
+  //         name: "Steve Walker",
+  //         profilePicture: avatar6,
+  //         role: null,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     gourpId: 4,
+  //     name: "#Developers",
+  //     profilePicture: "Null",
+  //     isGroup: true,
+  //     unRead: 0,
+  //     desc: "developers Group",
+  //     members: [
+  //       { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
+  //       {
+  //         userId: 2,
+  //         name: "Ossie Wilson",
+  //         profilePicture: avatar8,
+  //         role: "admin",
+  //       },
+  //       {
+  //         userId: 3,
+  //         name: "Jonathan Miller",
+  //         profilePicture: "Null",
+  //         role: null,
+  //       },
+  //       { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
+  //       { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
+  //       {
+  //         userId: 6,
+  //         name: "Steve Walker",
+  //         profilePicture: avatar6,
+  //         role: null,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     gourpId: 5,
+  //     name: "#Project-aplha",
+  //     profilePicture: "Null",
+  //     isGroup: true,
+  //     unRead: 0,
+  //     isNew: true,
+  //     desc: "project related Group",
+  //     members: [
+  //       { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
+  //       {
+  //         userId: 2,
+  //         name: "Ossie Wilson",
+  //         profilePicture: avatar8,
+  //         role: "admin",
+  //       },
+  //       {
+  //         userId: 3,
+  //         name: "Jonathan Miller",
+  //         profilePicture: "Null",
+  //         role: null,
+  //       },
+  //       { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
+  //       { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
+  //       {
+  //         userId: 6,
+  //         name: "Steve Walker",
+  //         profilePicture: avatar6,
+  //         role: null,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     gourpId: 6,
+  //     name: "#Snacks",
+  //     profilePicture: "Null",
+  //     isGroup: true,
+  //     unRead: 0,
+  //     desc: "snacks Group",
+  //     members: [
+  //       { userId: 1, name: "Sara Muller", profilePicture: "Null", role: null },
+  //       {
+  //         userId: 2,
+  //         name: "Ossie Wilson",
+  //         profilePicture: avatar8,
+  //         role: "admin",
+  //       },
+  //       {
+  //         userId: 3,
+  //         name: "Jonathan Miller",
+  //         profilePicture: "Null",
+  //         role: null,
+  //       },
+  //       { userId: 4, name: "Paul Haynes", profilePicture: avatar7, role: null },
+  //       { userId: 5, name: "Yana sha", profilePicture: avatar3, role: null },
+  //       {
+  //         userId: 6,
+  //         name: "Steve Walker",
+  //         profilePicture: avatar6,
+  //         role: null,
+  //       },
+  //     ],
+  //   },
+  // ],
   contacts: [
     { id: 1, name: "Albert Rodarte" },
     { id: 2, name: "Allison Etter" },
@@ -853,50 +857,73 @@ INIT_STATE.groups.map((user) => {
 });
 const Chat = (state = INIT_STATE, action) => {
   switch (action.type) {
-      case CHAT_USER:
-          return { ...state };
+    case CHAT_USER:
+      return { ...state };
 
-      case ACTIVE_USER:
-          return {
-              ...state,
-              active_user: action.payload,
-          };
+    case ACTIVE_USER:
+      return {
+        ...state,
+        active_user: action.payload,
+      };
 
-      case FULL_USER:
-          return {
-              ...state,
-              users: action.payload,
-          };
+    case FULL_USER:
+      return {
+        ...state,
+        users: action.payload,
+      };
 
-      case ADD_LOGGED_USER:
-          return {
-              ...state,
-              users: [...state.users, action.payload],
-          };
+    case ADD_LOGGED_USER:
+      return {
+        ...state,
+        users: [...state.users, action.payload],
+      };
 
-      case CREATE_GROUP_REQUEST:
-          return {
-              ...state,
-              loading: true,
-              error: null,
-          };
+    case CREATE_GROUP_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
 
-      case CREATE_GROUP_SUCCESS:
-          return {
-              ...state,
-              groups: [...state.groups, action.payload],
-              loading: false,
-          };
+    case CREATE_GROUP_SUCCESS:
+      return {
+        ...state,
+        groups: [...state.groups, action.payload],
+        loading: false,
+      };
 
-      case CREATE_GROUP_FAILURE:
-          return {
-              ...state,
-              loading: false,
-              error: action.payload,
-          };
+    case CREATE_GROUP_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
 
-      default:
-          return { ...state };
+    // Properly handle FETCH_ALL_GROUPS actions
+    case FETCH_ALL_GROUPS:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+
+    case FETCH_ALL_GROUPS_SUCCESS:
+      return {
+        ...state,
+        groups: action.payload, // Assign the fetched groups to state
+        loading: false,
+      };
+
+    case FETCH_ALL_GROUPS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // Always return current state for unhandled actions
+    default:
+      return state;
   }
 };
 
