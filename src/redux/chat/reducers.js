@@ -8,7 +8,10 @@ import {
   CREATE_GROUP_FAILURE,
   FETCH_ALL_GROUPS,
   FETCH_ALL_GROUPS_SUCCESS,
-  FETCH_ALL_GROUPS_FAILURE
+  FETCH_ALL_GROUPS_FAILURE,
+  DELETE_GROUP_REQUEST,
+  DELETE_GROUP_SUCCESS,
+  DELETE_GROUP_FAILURE,
 
 
 } from "./constants";
@@ -915,6 +918,27 @@ const Chat = (state = INIT_STATE, action) => {
       };
 
     case FETCH_ALL_GROUPS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    
+    case DELETE_GROUP_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+
+    case DELETE_GROUP_SUCCESS:
+            return {
+        ...state,
+        groups: state.groups.filter((group) => group._id !== action.payload),
+        loading: false,
+      };
+
+    case DELETE_GROUP_FAILURE:
       return {
         ...state,
         loading: false,

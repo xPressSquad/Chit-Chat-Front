@@ -1,17 +1,19 @@
 
-   
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, UncontrolledTooltip, Form, Label, Input, Collapse, CardHeader, CardBody, Alert, InputGroup, Card, Badge } from 'reactstrap';
+import {
+    Button, Modal, ModalHeader, ModalBody, ModalFooter, UncontrolledTooltip,
+    Form, Label, Input, Collapse, CardHeader, CardBody, Alert, InputGroup,
+    Card, Badge, Dropdown, DropdownToggle, DropdownMenu, DropdownItem
+} from 'reactstrap';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { withTranslation } from 'react-i18next';
 import SimpleBar from "simplebar-react";
 import SelectContact from "../../../components/SelectContact";
-import { createGroupRequest,fetchAllServers } from "../../../redux/actions";
+import { createGroupRequest, fetchAllServers, deleteGroupRequest, updateGroupRequest } from "../../../redux/actions";
 import { useDispatch } from 'react-redux';
 
-
-const Groups = ({ t, groups, createGroupRequest,fetchAllServers}) => {
+const Groups = ({ t, groups, createGroupRequest, fetchAllServers, updateGroupRequest }) => {
     const [groupName, setGroupName] = useState("");
     const [cover, setCover] = useState(null);
     const [visibility, setVisibility] = useState("public");
@@ -21,69 +23,106 @@ const Groups = ({ t, groups, createGroupRequest,fetchAllServers}) => {
     const [isOpenAlert, setIsOpenAlert] = useState(false);
     const [message, setMessage] = useState("");
     const [modal, setModal] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false); // New state for edit mode
+    const [selectedGroupId, setSelectedGroupId] = useState(null); // New state for selected group ID
     const [isOpenCollapse, setIsOpenCollapse] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [activeGroupMenu, setActiveGroupMenu] = useState(null);
 
+    const toggleGroupMenu = (groupId) => {
+        setActiveGroupMenu(activeGroupMenu === groupId ? null : groupId);
+    };
 
-
-    // Inside your component
     const dispatch = useDispatch();
     useEffect(() => {
-        fetchAllServers(); // Dispatch the action to fetch servers
-        console.log("fetching servers",fetchAllServers)
+        fetchAllServers();
     }, [fetchAllServers]);
 
-    const toggle = () => setModal(!modal);
+    const toggle = () => {
+        setModal(!modal);
+        resetModal(); // Reset modal data when closed
+    };
+
+    // Function to reset modal fields
+    const resetModal = () => {
+        setGroupName("");
+        setCover(null);
+        setVisibility("public");
+        setType("group");
+        setGroupDesc("");
+        setSelectedContact([]);
+        setIsEditMode(false);
+        setSelectedGroupId(null);
+    };
+
+    const handleUpdateGroup = (group) => {
+        // Populate modal with group data for updating
+        setGroupName(group.name);
+        setVisibility(group.visibility);
+        setType(group.type);
+        setGroupDesc(group.description || "");
+        setSelectedContact(group.members.map(member => ({ id: member.id, name: member.name })));
+        setSelectedGroupId(group._id);
+        setIsEditMode(true); // Set to edit mode
+        setModal(true); // Open modal
+    };
+
     const createNewGroup = () => {
         // Check if there are at least 2 members selected
         if (selectedContact.length >= 2) {
             const groupData = {
+                // id: selectedGroupId, // Use selected group ID if updating
                 name: groupName,
                 cover: cover ? URL.createObjectURL(cover) : null,
-                admin: "admin-id-placeholder", // Replace with actual admin ID
+                admin: "admin-id-placeholder",
                 members: selectedContact.map(contact => contact.id.toString()),
                 visibility,
                 type,
+                // description: groupDesc
             };
-            console.log("members ",groupData.members )
 
-    
-           createGroupRequest (groupData); // Dispatch the Redux action
+            if (isEditMode) {
+                // Dispatch the update action if in edit mode
+                dispatch(updateGroupRequest(groupData));
+            } else {
+                // Dispatch the create action if in create mode
+                dispatch(createGroupRequest(groupData));
+            }
             toggle(); // Close the modal
         } else {
-            // If there are fewer than 2 members selected, show the error message
             setMessage("Minimum 2 members required!!!");
             setIsOpenAlert(true);
-            
-            // Automatically close the alert after 3 seconds
             setTimeout(() => {
                 setIsOpenAlert(false);
             }, 3000);
         }
     };
+
     const handleCheck = (e, contactId) => {
         const { checked, value } = e.target;
         setSelectedContact(prevContacts => {
             if (checked) {
-                // Add contact if checked
                 return [...prevContacts, { id: contactId, name: value }];
             } else {
-                // Remove contact if unchecked
                 return prevContacts.filter(contact => contact.id !== contactId);
             }
         });
     };
 
-    useEffect(() => {
-    }, [selectedContact]);
+    useEffect(() => {}, [selectedContact]);
 
     const toggleCollapse = () => setIsOpenCollapse(!isOpenCollapse);
+
+    const handleDeleteGroup = (groupId) => {
+        dispatch(deleteGroupRequest(groupId));
+    };
+
+    const handleLeaveGroup = (groupId) => {};
 
     return (
         <React.Fragment>
             <div className="p-4">
                 <div className="user-chat-nav float-end">
-                    <Button onClick={toggle} type="button" color="link" className="text-decoration-none text-muted font-size-18 py-0" id="create-group">
+                    <Button onClick={() => { toggle(); setIsEditMode(false); }} type="button" color="link" className="text-decoration-none text-muted font-size-18 py-0" id="create-group">
                         <i className="ri-group-line me-1"></i>
                     </Button>
                     <UncontrolledTooltip target="create-group" placement="bottom">
@@ -93,7 +132,9 @@ const Groups = ({ t, groups, createGroupRequest,fetchAllServers}) => {
                 <h4 className="mb-4">{t('Groups')}</h4>
 
                 <Modal isOpen={modal} centered toggle={toggle}>
-                    <ModalHeader tag="h5" className="modal-title font-size-14" toggle={toggle}>{t('Create New Group')}</ModalHeader>
+                    <ModalHeader tag="h5" className="modal-title font-size-14" toggle={toggle}>
+                        {isEditMode ? t('Update Group') : t('Create New Group')}
+                    </ModalHeader>
                     <ModalBody className="p-4">
                         <Form>
                             <div className="mb-4">
@@ -178,57 +219,63 @@ const Groups = ({ t, groups, createGroupRequest,fetchAllServers}) => {
                     </ModalBody>
                     <ModalFooter>
                         <Button type="button" color="link" onClick={toggle}>{t('Close')}</Button>
-                        <Button type="button" color="primary" onClick={createNewGroup}>Create Group</Button>
+                        <Button type="button" color="primary" onClick={createNewGroup}>
+                            {isEditMode ? t('Update Group') : t('Create Group')}
+                        </Button>
                     </ModalFooter>
                 </Modal>
                 <div className="search-box chat-search-box">
-                    <InputGroup size="lg" className="bg-light rounded-lg">
-                        <Button color="link" className="text-decoration-none text-muted pr-1" type="button">
-                            <i className="ri-search-line search-icon font-size-18"></i>
-                        </Button>
-                        <Input type="text" className="form-control bg-light" placeholder="Search groups..." />
-                    </InputGroup>
-                </div>
-            </div>
-
-            <SimpleBar style={{ maxHeight: "100%" }} className="p-4 chat-message-list chat-group-list">
-                <ul className="list-unstyled chat-list">
-                    {Array.isArray(groups) && groups.map((group) => (
-                        <li key={group._id}>
-                            <Link to="#">
-                                <div className="d-flex align-items-center">
-                                    <div className="chat-user-img me-3 ms-0">
-                                        <div className="avatar-xs">
-                                            <span className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                {group.name.charAt(0)}
-                                            </span>
+              <InputGroup size="lg" className="bg-light rounded-lg">
+              <Button color="link" className="text-decoration-none text-muted pr-1" type="button">
+                  <i className="ri-search-line search-icon font-size-18"></i>
+              </Button>
+              <Input type="text" className="form-control bg-light" placeholder="Search groups..." />
+              </InputGroup>
+          </div>
+                
+                <SimpleBar style={{ maxHeight: "100%" }} className="p-4 chat-message-list chat-group-list">
+                    <ul className="list-unstyled chat-list">
+                        {Array.isArray(groups) && groups.map((group) => (
+                            <li key={group._id}>
+                                <Link to="#">
+                                    <div className="d-flex align-items-center justify-content-between">
+                                        <div className="chat-user-img me-3 ms-0">
+                                            <div className="avatar-xs">
+                                                <span className="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                    {group.name.charAt(0)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="flex-grow-1">
+                                            <h5 className="font-size-14 mb-0">{group.name}</h5>
+                                        </div>
+                                        <div className="dropdown">
+                                            <Dropdown isOpen={activeGroupMenu === group._id} toggle={() => toggleGroupMenu(group._id)}>
+                                                <DropdownToggle className="btn btn-link font-size-18 py-0" tag="i">
+                                                    <i className="ri-more-fill"></i>
+                                                </DropdownToggle>
+                                                <DropdownMenu end>
+                                                    <DropdownItem onClick={() => handleUpdateGroup(group)}>{t('Edit')}</DropdownItem>
+                                                    <DropdownItem onClick={() => handleDeleteGroup(group._id)}>{t('Delete')}</DropdownItem>
+                                                    <DropdownItem onClick={() => handleLeaveGroup(group._id)}>{t('Leave')}</DropdownItem>
+                                                </DropdownMenu>
+                                            </Dropdown>
                                         </div>
                                     </div>
-                                    <div className="flex-grow-1 overflow-hidden">
-                                        <h5 className="text-truncate font-size-14 mb-0">
-                                            {group.name}
-                                            {group.unRead > 0 && (
-                                                <Badge color="none" pill className="badge-soft-danger float-end">
-                                                    {group.unRead >= 20 ? `${group.unRead}+` : group.unRead}
-                                                </Badge>
-                                            )}
-                                            {group.isNew && <Badge color="none" pill className="badge-soft-danger float-end">New</Badge>}
-                                        </h5>
-                                    </div>
-                                </div>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </SimpleBar>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </SimpleBar>
+            </div>
         </React.Fragment>
     );
 };
 
+// Connect Redux
 const mapStateToProps = (state) => {
-    const { groups, active_user } = state.Chat;
-
-    return { groups, active_user };
+    const { groups } = state.Chat;
+    return { groups };
 };
 
-export default connect(mapStateToProps, { createGroupRequest,fetchAllServers })(withTranslation()(Groups));
+export default connect(mapStateToProps, { createGroupRequest, fetchAllServers, updateGroupRequest })(withTranslation()(Groups));

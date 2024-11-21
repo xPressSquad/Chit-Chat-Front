@@ -3,7 +3,12 @@ import {
     CREATE_GROUP_REQUEST,
     CREATE_GROUP_SUCCESS,
     CREATE_GROUP_FAILURE,
-  FETCH_ALL_GROUPS, FETCH_ALL_GROUPS_SUCCESS, FETCH_ALL_GROUPS_FAILURE
+  FETCH_ALL_GROUPS, FETCH_ALL_GROUPS_SUCCESS, FETCH_ALL_GROUPS_FAILURE,
+
+  DELETE_GROUP_REQUEST,
+  DELETE_GROUP_SUCCESS,
+  DELETE_GROUP_FAILURE
+
     
 
 } from './constants';
@@ -62,6 +67,33 @@ function* fetchAllServersSaga() {
       });
     }
   }
+
+  function* deleteGroupSaga(action) {
+    try {
+      const response = yield call(fetch, `http://localhost:5000/servers/${action.payload}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const data = yield response.json();
+    
+  
+      if (response.ok) {
+        yield put({ type: DELETE_GROUP_SUCCESS, payload: data._id });
+
+      } else {
+        yield put({ type: DELETE_GROUP_FAILURE, payload: data.message || 'Failed to delete group' });
+      }
+    } catch (error) {
+      yield put({
+        type: DELETE_GROUP_FAILURE,
+        payload: error.message || 'An error occurred',
+      });
+    }
+  } 
+
   
 
 // Watcher saga
@@ -73,6 +105,11 @@ export function* watchCreateGroup() {
 export function* watchFetchAllServers() {
     yield takeLatest(FETCH_ALL_GROUPS, fetchAllServersSaga);
 }
+
+export function* watchDeleteGroup() {
+    yield takeLatest(DELETE_GROUP_REQUEST, deleteGroupSaga);
+}
+
 
 
 

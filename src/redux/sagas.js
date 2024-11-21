@@ -1,7 +1,7 @@
 import { all } from 'redux-saga/effects';
 import authSaga from './auth/saga';
 import LayoutSaga from './layout/saga';
-import { watchCreateGroup, watchFetchAllServers } from './chat/saga';
+import { watchCreateGroup, watchDeleteGroup, watchFetchAllServers } from './chat/saga';
 
 export default function* rootSaga(getState) {
     yield all([
@@ -9,6 +9,7 @@ export default function* rootSaga(getState) {
         LayoutSaga(),
         watchCreateGroup(),
         watchFetchAllServers(),
+        watchDeleteGroup(),
 
     ]);
 }
