@@ -1,68 +1,65 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# ChatApp Frontend: Real-Time Messaging Platform
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+ChatApp Frontend is the client-side interface for a real-time messaging platform built with **React.js**. It enables users to securely register, log in, create chat rooms, send messages, and interact with other users in real time using **WebSockets**.
 
-### `yarn start`
+## Features
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **User Registration & Authentication**: Secure user registration and login using JWT tokens.
+- **Real-time Messaging**: Instant message delivery through WebSockets.
+- **Private & Group Chats**: Supports both one-on-one and group chats.
+- **Typing Indicator**: Shows when users are typing in real time.
+- **Message Notifications**: Notifies users of new incoming messages.
+- **Profile Management**: Users can view and update their profile.
+- **Password Management**: Option to reset the user password.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Technology Stack
 
-### `yarn test`
+- **Frontend**: React.js, Socket.IO (React), React Router, CSS
+- **Real-time Communication**: WebSockets using **Socket.IO** webrtc
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `yarn build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Ensure you have the following installed:
+- **Node.js** (version 14 or higher)
+- **npm**
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Steps
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Clone the Repository:**
 
-### `yarn eject`
+```bash
+git clone https://github.com/OSMaben/chatapp_frontend.git
+cd chatapp_frontend
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. **Install Project Dependencies:
+npm install
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+3. **Run the React Project:
+```bash
+npm start
+```
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contributing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+We welcome contributions! To contribute, please follow these steps:
 
-### Code Splitting
+1. **Fork the repository** to your own GitHub account.
+2. **Create a new branch** for your changes. Use a descriptive name for your branch, e.g., `feature/your-feature-name` or `bugfix/your-bugfix`.
+3. **Make your changes** in the new branch. Ensure that your code works and passes any tests.
+4. **Test your changes locally** to make sure everything works as expected.
+5. **Commit your changes** with a clear and concise commit message that explains the changes you made.
+6. **Push your changes** to your forked repository.
+7. **Submit a pull request (PR)** from your fork to the main repository. In your PR, provide a detailed explanation of the changes you made and why they are needed.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+We will review your PR and, if everything looks good, merge it into the main branch.
 
-### Analyzing the Bundle Size
+Thank you for your contribution!
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
